@@ -1,0 +1,121 @@
+﻿@model IEnumerable<FactureXpressProject.Models.Commande>
+@using System.Linq;
+
+    @{
+        ViewBag.Title = "Commandes";
+    }
+    <link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+
+    <style>
+        .container {
+            padding-left: 0;
+        }
+    </style>
+
+    <h2>Liste des commandes</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <br />
+
+    <div class="container">
+        <table>
+            <tbody>
+                <tr>
+                    <td style="width:300px">
+                        @Html.DropDownList("ClientId", null, "Please select client", htmlAttributes: new { @class = "form-control" })
+                    </td>
+                    <td style="width:40px">
+                    </td>
+                    <td style="width:150px">
+                        <input class="btn btn-success" id="press" value="Download Report" type="button" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br />
+
+    <table id="tblFacture" class="table table-striped table-bordered">
+        <tr>
+            @*<th></th>*@
+            <th>
+                Date
+            </th>
+            <th>
+                Nom Complet
+            </th>
+            <th>
+                Total
+            </th>
+            <th>Actions</th>
+        </tr>
+
+        <tbody id="resultsTable">
+            @if (ViewBag.commandes != null)
+            {
+                foreach (var item in ViewBag.commandes)
+                {
+                    <tr class="Search">
+                        <td>
+                            @item.Date
+                        </td>
+                        <td>
+                            @item.Client.FullName
+                        </td>
+                        <td>
+                            @*<label>@{Html.RenderAction("GetTotal", "Commandes", new { id = @item.CommandeId });}</label>*@
+                            @*<input name="id" hidden value="@item.CommandeId" />
+                                <div id="dynamicContentContainer"></div>*@
+                            @*@Model.Where(x => x.CommandeId == item.CommandeId).FirstOrDefault().Produits.Sum(x => x.Qantity * x.Price)*@
+                            @item.TotalPrice
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.CommandeId }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.CommandeId }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.CommandeId })
+                        </td>
+
+                    </tr>
+
+                }
+            }
+        </tbody>
+    </table>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+    $(document).ready(function () {
+        $("#ClientId").on('change', function () {
+
+            var n = $(this).val();
+            if (n == "") {
+                n = 0;
+            }
+            $.ajax({
+                type: "Post",
+                url: "/Commandes/Search?Id=" + n,
+                contentType: "html",
+                success: function (response) {
+                    $("#resultsTable").html(response);
+                }
+            })
+        });
+
+        @*$.get('@Url.Action("GetTotal", "Commandes")', { id: $("input[name='id']").val()}, function(content){
+                            $("#dynamicContentContainer").html(content);
+        });*@
+
+    });
+
+
+
+    $("#press").click(function () {
+        var n = $("#ClientId").val();
+        if (n == "") {
+            n = 0;
+        }
+        window.open("/Commandes/Report?Id=" + n, "_blank");
+    });
+    </script>

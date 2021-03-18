@@ -1,0 +1,32 @@
+﻿@model IEnumerable<FactureXpressProject.Models.Commande>
+<table class="table table-striped">
+    <tbody id="searchTable">
+        @if (Model != null)
+        {
+
+            foreach (var item in Model)
+            {
+
+        <tr class="Search">
+            <td>
+                @item.Date
+            </td>
+            <td>
+                @item.Client.FullName
+            </td>
+            <td>
+                
+                @item.TotalPrice
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.CommandeId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.CommandeId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.CommandeId })
+            </td>
+        </tr>
+
+            }
+        }
+    </tbody>
+    </table>

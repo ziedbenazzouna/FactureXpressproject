@@ -1,0 +1,252 @@
+﻿@model FactureXpressProject.Models.GeneralModel
+@using FactureXpressProject.Models;
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+    .desc {
+        margin-bottom: 25px;
+        margin-top: 25px;
+    }
+</style>
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <body>
+        <div class="alert alert-danger fade out" id="bsalert">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Info!</strong> Il faut entrer le nom de client et minimum un produit
+        </div>
+        <div class="form-horizontal">
+            <h4>Commande</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div id="myRadioGroup">
+                Nouveau client       <input type="radio" name="cars" checked="checked" value="2" style="margin-right:25px" />
+                client existant       <input type="radio" name="cars" value="3" />
+
+                <div id="Cars2" class="desc">
+                    <div class="form-group">
+                        <label asp-for="FullName" class="control-label"></label><label class="text-danger">*</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Matricule, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Matricule, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Matricule, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </div>
+                <div id="Cars3" class="desc" style="display: none;">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ClientId, "Nom client", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("ClientId", null, "Please select client", htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ClientId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <table id="tblProduits" class="table table-striped table-bordered" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th style="width:150px">Description</th>
+                        <th style="width:150px">Quantité</th>
+                        <th style="width:150px">Prix</th>
+                        <th style="width:150px">Total</th>
+                        <th style="width:150px">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" id="txtDescription" />
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" id="txtQantity" />
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" id="txtPrice" />
+                        </td>
+                        <td></td>
+                        <td>
+                            <input type="button" class="btn btn-success" id="btnAdd" value="Add" />
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </body>
+}
+
+<div>
+    <input type="button" id="btnSave" value="Create" class="btn btn-default" /> |
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $("input[name$='cars']").click(function () {
+            var test = $(this).val();
+
+            $("div.desc").hide();
+            $("#Cars" + test).show();
+        });
+
+        $("input[name$='cars']").on("change",function () {
+            if ($("input[name$='cars']")[0].checked == true) {
+                $("#ClientId").val("");
+            }
+            else {
+                $("#FullName").val("");
+                $("#Matricule").val("");
+                $("#Email").val("");
+                $("#PhoneNumber").val("");
+            }
+        });
+    });
+
+    $("body").on("click", "#btnAdd", function () {
+        var txtDescription = $("#txtDescription");
+        var txtQantity = $("#txtQantity");
+        var txtPrice = $("#txtPrice");
+
+
+        var tBody = $("#tblProduits > TBODY")[0];
+
+
+        var row = tBody.insertRow(-1);
+
+        //Add Description cell.
+        var cell = $(row.insertCell(-1));
+        cell.html(txtDescription.val());
+
+        //Add Qantity cell.
+        cell = $(row.insertCell(-1));
+        cell.html(txtQantity.val());
+
+        //Add Price cell.
+        cell = $(row.insertCell(-1));
+        cell.html(txtPrice.val());
+
+        //Add Price Total.
+        cell = $(row.insertCell(-1));
+        cell.html(txtPrice.val() * txtQantity.val());
+
+        //Add Button cell.
+        cell = $(row.insertCell(-1));
+        var btnRemove = $("<input />");
+        btnRemove.attr("type", "button");
+        btnRemove.attr("class", "btn btn-danger");
+        btnRemove.attr("onclick", "Remove(this);");
+        btnRemove.val("Remove");
+        cell.append(btnRemove);
+
+        //Clear the TextBoxes.
+        txtDescription.val("");
+        txtQantity.val("");
+        txtPrice.val("");
+    });
+
+    function Remove(button) {
+        //Determine the reference of the Row using the Button.
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(0).html();
+        if (confirm("Do you want to delete: " + name)) {
+            //Get the reference of the Table.
+            var table = $("#tblProduits")[0];
+
+            //Delete the Table row using it's Index.
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+    $(".alert").hide();
+    $("body").on("click", "#btnSave", function () {
+        console.log("click");
+
+        if (($("#FullName").val() != "" || $("#ClientId").val() !="") && $("#tblProduits TBODY TR").length !=0) {
+
+            //Loop through the Table rows and build a JSON array.
+            var Produits = new Array();
+            $("#tblProduits TBODY TR").each(function () {
+                var row = $(this);
+                var produit = {};
+                produit.description = row.find("TD").eq(0).html();
+                produit.qantity = parseInt(row.find("TD").eq(1).html());
+                produit.price = parseInt(row.find("TD").eq(2).html());
+                Produits.push(produit);
+            });
+
+            console.log(Produits);
+        @*var model = @Html.Raw(Json.Encode(Model));*@
+            var n = $("#ClientId").val();
+            if (n == "") {
+                n = 0;
+            }
+            var model = {
+                ClientId: n,
+                FullName: $("#FullName").val(),
+                Matricule: $("#Matricule").val(),
+                Email: $("#Email").val(),
+                PhoneNumber: $("#PhoneNumber").val(),
+                Produits: Produits
+            };
+            console.log(model);
+
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "Post",
+                url: "/Commandes/Create",
+                data: JSON.stringify(model),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    location.replace("../Commandes")
+                }
+            });
+        }
+        else {
+            $(".alert").fadeTo(2000, 500).slideUp(3000, function () {
+                $(".alert").slideUp(3000);
+            });
+        }
+    });
+</script>

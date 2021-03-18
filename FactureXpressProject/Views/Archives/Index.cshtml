@@ -1,0 +1,39 @@
+﻿@model IEnumerable<FactureXpressProject.Models.Commande>
+
+@{
+    ViewBag.Title = "Archives";
+}
+
+<h2>Liste des archives</h2>
+
+<table class="table table-striped table-bordered">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Client.FullName)
+        </th>
+
+        <th>Actions</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.FullName)
+            </td>
+
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.CommandeId })|
+                @Html.ActionLink("Restore", "Delete", new { id = item.CommandeId })
+            </td>
+        </tr>
+    }
+
+</table>
