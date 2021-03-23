@@ -76,7 +76,14 @@
                 </div>
             </div>
 
-
+            <div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.WithStamp, "Timbre", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input type="checkbox" id="Stamp"/>
+                    </div>
+                </div>
+            </div>
 
             <table id="tblProduits" class="table table-striped table-bordered" cellpadding="0" cellspacing="0">
                 <thead>
@@ -103,7 +110,7 @@
                         </td>
                         <td></td>
                         <td>
-                            <input type="button" class="btn btn-success" id="btnAdd" value="Add" />
+                            <input type="button" class="btn btn-success" id="btnAdd" disabled="" value="Add" />
                         </td>
                     </tr>
                 </tfoot>
@@ -142,6 +149,16 @@
                 $("#PhoneNumber").val("");
             }
         });
+
+        $('#btnAdd').prop('disabled', true);
+
+        
+    });
+
+
+    $('#txtDescription, #txtQantity, #txtPrice').keyup(function () {
+        if ($('#txtDescription').val() != "" && $('#txtQantity').val() != "" && $('#txtPrice').val() != "")
+            $('#btnAdd').prop('disabled', false);
     });
 
     $("body").on("click", "#btnAdd", function () {
@@ -227,6 +244,7 @@
                 Matricule: $("#Matricule").val(),
                 Email: $("#Email").val(),
                 PhoneNumber: $("#PhoneNumber").val(),
+                WithStamp: $('#Stamp')[0].checked,
                 Produits: Produits
             };
             console.log(model);
@@ -244,8 +262,8 @@
             });
         }
         else {
-            $(".alert").fadeTo(2000, 500).slideUp(3000, function () {
-                $(".alert").slideUp(3000);
+            $(".alert").fadeTo(2000, 500).slideUp(5000, function () {
+                $(".alert").slideUp(5000);
             });
         }
     });

@@ -9264,11 +9264,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\MOMENTUM3\\source\\repos\\FactureXpressProject\\FactureXpressProject\\FactureXpressProject.csproj",
+      "projectUniqueName": "D:\\Zied\\FactureXpressProject\\FactureXpressProject\\FactureXpressProject.csproj",
       "projectName": "FactureXpressProject",
-      "projectPath": "C:\\Users\\MOMENTUM3\\source\\repos\\FactureXpressProject\\FactureXpressProject\\FactureXpressProject.csproj",
+      "projectPath": "D:\\Zied\\FactureXpressProject\\FactureXpressProject\\FactureXpressProject.csproj",
       "packagesPath": "C:\\Users\\MOMENTUM3\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\MOMENTUM3\\source\\repos\\FactureXpressProject\\FactureXpressProject\\obj\\",
+      "outputPath": "D:\\Zied\\FactureXpressProject\\FactureXpressProject\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

@@ -19,5 +19,7 @@ namespace FactureXpressProject.Data
         public DbSet<Commande> Commande { get; set; }
 
         public DbSet<Produit> Produits { get; set; }
+
+        public DbSet<Settings> Settings { get; set; }
     }
 }

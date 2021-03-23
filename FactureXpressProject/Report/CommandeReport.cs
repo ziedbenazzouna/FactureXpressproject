@@ -139,7 +139,7 @@ namespace FactureXpressProject.Report
             _pdfTableInfos.CompleteRow();
 
             _fontStyle = FontFactory.GetFont("Tahoma", 8f, 1);
-            _pdfPCell = new PdfPCell(new Phrase("Code T.V.A.: 1144382/H/A/M/000", _fontStyle));
+            _pdfPCell = new PdfPCell(new Phrase("Code T.V.A.: " + _context.Settings.FirstOrDefault().TaxRegistration, _fontStyle));
             _pdfPCell.Border = Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER;
 
             _pdfTableInfos.AddCell(_pdfPCell);
@@ -236,7 +236,7 @@ namespace FactureXpressProject.Report
             int? somme = 0;
             int? tva = 0;
             int? ttc = 0;
-            int timbre = 0;
+            int? timbre = _context.Settings.FirstOrDefault().Stamp;
             int? total = 0;
             foreach (Commande cmd in commandes)
             {
@@ -245,9 +245,9 @@ namespace FactureXpressProject.Report
                 {
                     somme = somme + (p.Price * p.Qantity);
                 }
-                tva = (somme * 19) / 100;
+                tva = (somme * _context.Settings.FirstOrDefault().Tva) / 100;
                 ttc = somme + tva;
-                timbre = 600;
+                timbre = cmd.WithStamp == true ? timbre : 0;
                 total = ttc + timbre;
                 _fontStyle = FontFactory.GetFont("Tahoma", 8f, 1);
             }
@@ -261,7 +261,7 @@ namespace FactureXpressProject.Report
             _pdfTableTotal.AddCell(_pdfPCell);
             _pdfTableTotal.CompleteRow();
 
-            _pdfPCell = new PdfPCell(new Phrase("T.V.A 19%       " + tva.Value.ToString("#,##0"), _fontStyle));
+            _pdfPCell = new PdfPCell(new Phrase("T.V.A " + _context.Settings.FirstOrDefault().Tva + "      " + tva.Value.ToString("#,##0"), _fontStyle));
             _pdfPCell.Colspan = _totalColumn;
             _pdfPCell.HorizontalAlignment = Element.ALIGN_RIGHT;
             _pdfPCell.Border = Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER;
@@ -280,7 +280,7 @@ namespace FactureXpressProject.Report
             _pdfTableTotal.AddCell(_pdfPCell);
             _pdfTableTotal.CompleteRow();
 
-            _pdfPCell = new PdfPCell(new Phrase("Timbre fiscale          " + timbre.ToString("#,##0"), _fontStyle));
+            _pdfPCell = new PdfPCell(new Phrase("Timbre fiscale          " + timbre?.ToString("#,##0"), _fontStyle));
             _pdfPCell.Colspan = _totalColumn;
             _pdfPCell.HorizontalAlignment = Element.ALIGN_RIGHT;
             _pdfPCell.Border = Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER;

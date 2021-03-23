@@ -18,6 +18,9 @@ namespace FactureXpressProject.Models
 
         public bool Deleted { get; set; }
 
+        [DisplayName("Timbre")]
+        public bool WithStamp { get; set; }
+
         public Client Client { get; set; }
 
         public List<Produit> Produits { get; set; }

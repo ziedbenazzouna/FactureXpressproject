@@ -121,6 +121,7 @@ namespace FactureXpressProject.Controllers
 
                 c.ClientId = cl.ClientId;
                 c.Date = DateTime.Now;
+                c.WithStamp = genralmodel.WithStamp;
                 _context.Commande.Add(c);
                 _context.SaveChanges();
 
@@ -136,6 +137,7 @@ namespace FactureXpressProject.Controllers
             {
                 c.ClientId = genralmodel.ClientId;
                 c.Date = DateTime.Now;
+                c.WithStamp = genralmodel.WithStamp;
                 _context.Commande.Add(c);
                 _context.SaveChanges();
 

@@ -35,6 +35,17 @@ namespace FactureXpressProject.Models
 
         public int? Price { get; set; }
 
+        [DisplayName("Timbre")]
+        public bool WithStamp { get; set; }
+
+        public int? TotalPrice
+        {
+            get
+            {
+                return Produits?.Sum(p => p.Qantity * p.Price);
+            }
+        }
+
         public List<Produit> Produits { get; set; } = new List<Produit>();
     }
 }
